@@ -4,7 +4,19 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { MagSubscription } from 'src/mag-subscription/entities/mag-subscription-entity';
+import { MagSubscriptionService } from 'src/mag-subscription/mag-subscription.service';
 
+interface UserWithSubscriptionList {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  age: number;
+  password: string;
+  gender: string;
+  subscriptions?: Array<any>;
+}
 @Injectable()
 export class UserService {
   /**
@@ -13,6 +25,9 @@ export class UserService {
    */
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(MagSubscription)
+    private readonly magSubscriptionRepository: Repository<MagSubscription>,
+    private readonly magSubscriptionService: MagSubscriptionService,
   ) {}
 
   /**
@@ -46,8 +61,20 @@ export class UserService {
    * @param id is type of number, which represent the id of user.
    * @returns promise of user
    */
-  viewUser(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+  async viewUser(id: number): Promise<User> {
+    const user = this.userRepository.findOneBy({ id });
+    return user;
+  }
+
+  async viewUserSubscription(id: number): Promise<any> {
+    console.log(`viewUser called`, id);
+    // const subscriptions = await this.magSubscriptionRepository.getAllMagazineSubscriptionByUserId();
+    const magSubscriptionList =
+      await this.magSubscriptionService.getAllMagazineSubscriptionByUserId(id);
+    console.log(`magSubscriptionList:-- `, magSubscriptionList);
+    const user = this.userRepository.findOneBy({ id });
+    user['subscriptions'] = magSubscriptionList;
+    return magSubscriptionList;
   }
 
   /**

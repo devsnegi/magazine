@@ -48,8 +48,13 @@ export class UserController {
    * GET http://localhost:3000/user/:id
    */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.viewUser(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.userService.viewUser(+id);
+  }
+
+  @Get(':id/subcriptions')
+  async findOneDetail(@Param('id') id: string) {
+    return await this.userService.viewUserSubscription(+id);
   }
 
   /**
