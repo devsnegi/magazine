@@ -30,12 +30,4 @@ export class MagSubscription {
 
   @Column({ default: true })
   isActive: boolean;
-
-  // @ManyToOne(() => User, (user) => user.id, { eager: true })
-  // @JoinColumn()
-  // userEntries: User[];
-
-  // @OneToMany(() => Magazine, (magazine) => magazine.id, { eager: true })
-  // @JoinColumn()
-  // magazineEntries: Magazine[];
 }

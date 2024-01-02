@@ -21,7 +21,7 @@ export class MagSubscriptionController {
     return this.magSubscriptionService.findAllMagSubscription();
   }
 
-  @Patch(':id/unsubcribe')
+  @Patch(':id/unsubscribe')
   async update(
     @Param('id') id: string,
     @Body() unsubscribeSubscriptionDto: UnsubscribeSubscriptionDto,

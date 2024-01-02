@@ -19,6 +19,7 @@ export class MagazineService {
     magazine.category = createMagazineDto.category;
     magazine.publication = createMagazineDto.publication;
     magazine.issue = createMagazineDto.issue;
+    magazine.imageurl = createMagazineDto.imageurl;
 
     return this.magazineRepository.save(magazine);
   }
@@ -40,7 +41,9 @@ export class MagazineService {
     magazine.category = updateMagazineDto.category;
     magazine.publication = updateMagazineDto.publication;
     magazine.issue = updateMagazineDto.issue;
+    magazine.imageurl = updateMagazineDto.imageurl;
     magazine.id = id;
+
     return this.magazineRepository.save(magazine);
   }
 

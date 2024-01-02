@@ -16,11 +16,11 @@ import { MagSubscription } from './mag-subscription/entities/mag-subscription-en
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
-      password: '@developers',
+      port: 5433,
+      password: 'dev@123',
       username: 'postgres',
       entities: [User, Magazine, Subscription, MagSubscription], // here we have added user enitity in entities array
-      database: 'user',
+      database: 'magazinedb',
       synchronize: true,
       logging: true,
     }),

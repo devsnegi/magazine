@@ -1,11 +1,8 @@
 import {
   IsAlphanumeric,
-  IsEmail,
-  IsEnum,
   IsInt,
   IsNotEmpty,
   IsString,
-  Matches,
   MinLength,
 } from 'class-validator';
 
@@ -28,4 +25,7 @@ export class CreateMagazineDto {
 
   @IsInt()
   issue: number;
+
+  @IsString()
+  imageurl: string;
 }

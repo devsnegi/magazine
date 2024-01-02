@@ -19,4 +19,7 @@ export class Magazine {
 
   @Column({ type: 'int' })
   issue: number;
+
+  @Column({ type: 'varchar', length: 200 })
+  imageurl: string;
 }

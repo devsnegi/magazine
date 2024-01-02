@@ -14,12 +14,4 @@ export class CreateMagSubscriptionDto {
   userId: number;
 
   isActive: boolean;
-
-  // @IsNotEmpty()
-  // @IsInt()
-  // userEntries: number;
-
-  // @IsNotEmpty()
-  // @IsInt()
-  // magazineEntries: number;
 }
