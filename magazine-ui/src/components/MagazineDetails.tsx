@@ -8,17 +8,37 @@ interface Magazine {
   category: string;
   publication: string;
 }
-export const MagazineDetails = () => {
+
+interface MagazineDetail {
+  id: number;
+  name: string;
+  category: string;
+  publication: string;
+  issue: number;
+  imagurl: string;
+}
+interface SubscribedMagazine {
+  id: number;
+  subscriptionId: number;
+  userId: number;
+  magazineId: number;
+  isActive: boolean;
+  magazineDetail: MagazineDetail;
+}
+// @ts-ignore
+export const MagazineDetails = ({ magazine }) => {
   // @ts-expect-error
   const { dispatch } = useContext(MagazineContext);
-  const [magazine, setMagazine] = useState<Magazine>({
-    id: 0,
-    name: "",
-    category: "",
-    publication: "",
-  });
   const [newSubscription, setNewSubscription] = useState(0);
   const [subscriptionList, setSubscriptionList] = useState([]);
+
+  const getMagazineID = (id: number) => {
+    // @ts-ignore
+    const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
+      (sub: SubscribedMagazine) => sub.magazineId === id
+    );
+    return subscribedMagazine?.id;
+  };
 
   useEffect(() => {
     const requestOptions = {
@@ -31,18 +51,33 @@ export const MagazineDetails = () => {
       .then((data) => setSubscriptionList(data));
   }, []);
 
-  useEffect(() => {
+  const checkAndUpdateSubscription = (magazineId: number, active: boolean) => {
     const requestOptions = {
-      method: "GET",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        isActive: active,
+      }),
     };
-
-    fetch(`${BASE_API_URL}magazine`, requestOptions)
+    // @ts-ignore
+    fetch(
+      `${BASE_API_URL}mag-subscription/${magazineId}/unsubscribe`,
+      requestOptions
+    )
       .then((response) => response.json())
-      .then((data) => setMagazine(data));
-  }, []);
+      .then((data) => setNewSubscription(data.id));
+  };
 
-  const handleSubscribe = (id: number) => {
+  const handleSubscribe = async (id: number) => {
+    // // @ts-ignore
+    // const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
+    //   (sub: SubscribedMagazine) => sub.magazineId === id
+    // );
+    const magazineId = getMagazineID(id);
+    if (magazineId) {
+      checkAndUpdateSubscription(magazineId, true);
+      return;
+    }
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -58,43 +93,35 @@ export const MagazineDetails = () => {
       .then((response) => response.json())
       .then((data) => setNewSubscription(data.id));
   };
-
   const handleUnSubscribe = (id: number) => {
-    const requestOptions = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch(`${BASE_API_URL}mag-subscription/${id}/unsubscribe`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => setNewSubscription(data.id));
+    const magazineId = getMagazineID(id);
+    // @ts-ignore
+    // const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
+    //   (sub: SubscribedMagazine) => sub.magazineId === id
+    // );
+    // return subscribedMagazine?.id;
+    checkAndUpdateSubscription(magazineId, false);
   };
 
   const getSubScriptionBtn = (id: number) => {
     // @ts-ignore
-    const isSubscribed = subscriptionList.find((sub) => sub.magazineId === id);
+    const isSubscribed = subscriptionList.find(
+      // @ts-ignore
+      (sub) => sub.magazineId === id && sub.isActive
+    );
     return isSubscribed ? (
-      <button
-        className="subscribe-btn"
-        onClick={() => handleUnSubscribe(magazine.id)}
-      >
+      <button className="subscribe-btn" onClick={() => handleUnSubscribe(id)}>
         UnSubscribe
       </button>
     ) : (
-      <button
-        className="subscribe-btn"
-        onClick={() => handleSubscribe(magazine.id)}
-      >
+      <button className="subscribe-btn" onClick={() => handleSubscribe(id)}>
         Subscribe
       </button>
     );
   };
 
   return (
-    <li
-      className="magazine-card"
-      onClick={() => dispatch({ type: "REMOVE_BOOK", id: magazine.id })}
-    >
+    <li className="magazine-card">
       <div className="mag-image">
         <img src="./images1.jpeg" alt={magazine.name} />
       </div>

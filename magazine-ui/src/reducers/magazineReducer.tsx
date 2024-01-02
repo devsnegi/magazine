@@ -3,7 +3,7 @@ import { v1 as uuid } from "uuid";
 // @ts-expect-error
 export const magazineReducer = (state, action) => {
   switch (action.type) {
-    case "ADD_BOOK":
+    case "SHOW_MY_SUBSCRIPTION":
       console.log("cation:-", action);
       return [
         ...state,
