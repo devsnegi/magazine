@@ -16,9 +16,10 @@ export class SubscriptionService {
   ): Promise<Subscription> {
     const subscription: Subscription = new Subscription();
 
-    subscription.name = createSubscriptionDto.name;
-    subscription.price = createSubscriptionDto.price;
-    subscription.type = createSubscriptionDto.type;
+    subscription.userId = createSubscriptionDto.userId;
+    subscription.magazineId = createSubscriptionDto.magazineId;
+    subscription.isActive = createSubscriptionDto.isActive;
+    subscription.date = createSubscriptionDto.date;
 
     return this.subscriptionRepository.save(subscription);
   }

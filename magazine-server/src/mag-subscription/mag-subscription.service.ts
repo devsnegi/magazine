@@ -20,12 +20,10 @@ export class MagSubscriptionService {
   ): Promise<MagSubscription> {
     const magSubscription: MagSubscription = new MagSubscription();
 
-    magSubscription.subscriptionId = createMagSubscriptionDto.subscriptionId;
     magSubscription.userId = createMagSubscriptionDto.userId;
     magSubscription.magazineId = createMagSubscriptionDto.magazineId;
-
-    // magSubscription.userEntriesId = createMagSubscriptionDto.userEntries;
-    // magSubscription.magazineEntries = createMagSubscriptionDto.magazineEntries;
+    magSubscription.startDate = createMagSubscriptionDto.startDate;
+    magSubscription.endDate = createMagSubscriptionDto.endDate;
 
     return this.magsubscriptionRepository.save(magSubscription);
   }

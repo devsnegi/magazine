@@ -18,6 +18,9 @@ export class Magazine {
   publication: string;
 
   @Column({ type: 'int' })
+  price: number;
+
+  @Column({ type: 'int' })
   issue: number;
 
   @Column({ type: 'varchar', length: 200 })

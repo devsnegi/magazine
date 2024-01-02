@@ -19,7 +19,6 @@ interface MagazineDetail {
 }
 interface SubscribedMagazine {
   id: number;
-  subscriptionId: number;
   userId: number;
   magazineId: number;
   isActive: boolean;
@@ -46,7 +45,7 @@ export const MagazineDetails = ({ magazine }) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch(`${BASE_API_URL}user/7/subcriptions`, requestOptions)
+    fetch(`${BASE_API_URL}user/4/subcriptions`, requestOptions)
       .then((response) => response.json())
       .then((data) => setSubscriptionList(data));
   }, []);
@@ -78,14 +77,18 @@ export const MagazineDetails = ({ magazine }) => {
       checkAndUpdateSubscription(magazineId, true);
       return;
     }
+    const defaultEndDate = new Date();
+    defaultEndDate.setFullYear(defaultEndDate.getFullYear() + 5);
+
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        subscriptionId: 1,
-        userId: 7,
+        userId: 4,
         magazineId: id,
         isActive: true,
+        startDate: new Date(),
+        endDate: defaultEndDate,
       }),
     };
 
@@ -129,6 +132,7 @@ export const MagazineDetails = ({ magazine }) => {
         <div className="title">{magazine.name}</div>
         <div className="author">Category: {magazine.category}</div>
         <div className="author">Publication: {magazine.publication}</div>
+        <div className="author">Price: {magazine.price}$</div>
         {getSubScriptionBtn(magazine.id)}
       </div>
     </li>

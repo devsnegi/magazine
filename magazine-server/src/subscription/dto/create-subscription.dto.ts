@@ -1,25 +1,17 @@
-import {
-  IsAlphanumeric,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-} from 'class-validator';
-
+import { IsInt, IsNotEmpty, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 export class CreateSubscriptionDto {
-  @IsString()
-  @MinLength(3, { message: 'Name must have atleast 3 characters.' })
+  @IsInt()
   @IsNotEmpty()
-  name: string;
+  magazineId: number;
 
+  @IsInt()
   @IsNotEmpty()
-  @MinLength(3, { message: 'Category must have atleast 3 characters.' })
-  @IsAlphanumeric(null, {
-    message: 'price does not allow other than alpha numeric chars.',
-  })
-  price: string;
+  userId: number;
 
-  @IsString()
-  @IsEnum(['monthly', 'quarterly', 'yearly'])
-  type: string;
+  isActive: boolean;
+
+  @IsDate()
+  @Type(() => Date)
+  date: Date;
 }

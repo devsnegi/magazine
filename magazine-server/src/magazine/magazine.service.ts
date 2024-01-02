@@ -19,6 +19,7 @@ export class MagazineService {
     magazine.category = createMagazineDto.category;
     magazine.publication = createMagazineDto.publication;
     magazine.issue = createMagazineDto.issue;
+    magazine.price = createMagazineDto.price;
     magazine.imageurl = createMagazineDto.imageurl;
 
     return this.magazineRepository.save(magazine);

@@ -18,9 +18,6 @@ export class MagSubscription {
   id: number;
 
   @Column({ unique: false })
-  subscriptionId: number;
-
-  @Column({ unique: false })
   userId: number;
 
   @Column({ unique: false })
@@ -28,6 +25,18 @@ export class MagSubscription {
   magazineDetail: any;
   userDetail: string;
 
-  @Column({ default: true })
+  @Column({ unique: false })
+  price: number;
+
+  @Column({ type: 'enum', enum: ['weekly', 'monthly', 'yearly'] })
+  type: string;
+
+  @Column({ unique: false })
   isActive: boolean;
+
+  @Column({ unique: false })
+  startDate: Date;
+
+  @Column({ unique: false })
+  endDate: Date;
 }

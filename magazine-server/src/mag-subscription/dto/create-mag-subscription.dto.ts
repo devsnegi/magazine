@@ -1,10 +1,7 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsDate, IsString, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateMagSubscriptionDto {
-  @IsInt()
-  @IsNotEmpty()
-  subscriptionId: number;
-
   @IsInt()
   @IsNotEmpty()
   magazineId: number;
@@ -14,4 +11,19 @@ export class CreateMagSubscriptionDto {
   userId: number;
 
   isActive: boolean;
+
+  @IsInt()
+  price: number;
+
+  @IsString()
+  @IsEnum(['weekly', 'monthly', 'yearly'])
+  type: string;
+
+  @IsDate()
+  @Type(() => Date)
+  startDate: Date;
+
+  @IsDate()
+  @Type(() => Date)
+  endDate: Date;
 }

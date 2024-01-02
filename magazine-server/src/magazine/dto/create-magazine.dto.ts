@@ -26,6 +26,9 @@ export class CreateMagazineDto {
   @IsInt()
   issue: number;
 
+  @IsInt()
+  price: number;
+
   @IsString()
   imageurl: string;
 }
