@@ -1,10 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MagazineContext } from "../contexts/MagazineContext";
 import { BASE_API_URL } from "../constant/appConstant";
-// @ts-expect-error
-export const MagazineDetails = ({ magazine }) => {
+
+interface Magazine {
+  id: number;
+  name: string;
+  category: string;
+  publication: string;
+}
+export const MagazineDetails = () => {
   // @ts-expect-error
   const { dispatch } = useContext(MagazineContext);
+  const [magazine, setMagazine] = useState<Magazine>({
+    id: 0,
+    name: "",
+    category: "",
+    publication: "",
+  });
   const [newSubscription, setNewSubscription] = useState(0);
   const [subscriptionList, setSubscriptionList] = useState([]);
 
@@ -17,6 +29,17 @@ export const MagazineDetails = ({ magazine }) => {
     fetch(`${BASE_API_URL}user/7/subcriptions`, requestOptions)
       .then((response) => response.json())
       .then((data) => setSubscriptionList(data));
+  }, []);
+
+  useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch(`${BASE_API_URL}magazine`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => setMagazine(data));
   }, []);
 
   const handleSubscribe = (id: number) => {

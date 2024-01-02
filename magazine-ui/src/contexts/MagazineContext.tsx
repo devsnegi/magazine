@@ -5,15 +5,11 @@ export const MagazineContext = createContext();
 
 // @ts-expect-error
 const MagazineContextProvider = (props) => {
-  const [magazines, dispatch] = useReducer(magazineReducer, [], () => {
-    const localData = localStorage.getItem("books");
-    return localData ? JSON.parse(localData) : [];
-  });
+  const [magazines, dispatch] = useReducer(magazineReducer, []);
 
-  useEffect(() => {
-    localStorage.setItem("books", JSON.stringify(magazines));
-    console.log("books:-", magazines);
-  }, [magazines]);
+  // useEffect(() => {
+  //   localStorage.setItem("books", JSON.stringify(magazines));
+  // }, [magazines]);
   return (
     <MagazineContext.Provider value={{ magazines, dispatch }}>
       {props.children}
