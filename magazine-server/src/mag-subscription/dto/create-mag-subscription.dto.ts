@@ -10,6 +10,7 @@ export class CreateMagSubscriptionDto {
   @IsNotEmpty()
   userId: number;
 
+  @IsNotEmpty()
   isActive: boolean;
 
   @IsInt()

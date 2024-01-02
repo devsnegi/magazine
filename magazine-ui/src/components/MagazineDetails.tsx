@@ -14,6 +14,8 @@ interface MagazineDetail {
   name: string;
   category: string;
   publication: string;
+  price: number;
+  type: ["weekly", "monthly", "yearly"];
   issue: number;
   imagurl: string;
 }
@@ -67,12 +69,8 @@ export const MagazineDetails = ({ magazine }) => {
       .then((data) => setNewSubscription(data.id));
   };
 
-  const handleSubscribe = async (id: number) => {
-    // // @ts-ignore
-    // const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
-    //   (sub: SubscribedMagazine) => sub.magazineId === id
-    // );
-    const magazineId = getMagazineID(id);
+  const handleSubscribe = async (magazine: MagazineDetail) => {
+    const magazineId = getMagazineID(magazine.id);
     if (magazineId) {
       checkAndUpdateSubscription(magazineId, true);
       return;
@@ -85,8 +83,10 @@ export const MagazineDetails = ({ magazine }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: 4,
-        magazineId: id,
+        magazineId: magazine.id,
         isActive: true,
+        price: magazine.price,
+        type: "weekly",
         startDate: new Date(),
         endDate: defaultEndDate,
       }),
@@ -96,28 +96,29 @@ export const MagazineDetails = ({ magazine }) => {
       .then((response) => response.json())
       .then((data) => setNewSubscription(data.id));
   };
-  const handleUnSubscribe = (id: number) => {
-    const magazineId = getMagazineID(id);
-    // @ts-ignore
-    // const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
-    //   (sub: SubscribedMagazine) => sub.magazineId === id
-    // );
-    // return subscribedMagazine?.id;
+  const handleUnSubscribe = (magazine: MagazineDetail) => {
+    const magazineId = getMagazineID(magazine.id);
     checkAndUpdateSubscription(magazineId, false);
   };
 
-  const getSubScriptionBtn = (id: number) => {
+  const getSubScriptionBtn = (magazine: MagazineDetail) => {
     // @ts-ignore
     const isSubscribed = subscriptionList.find(
       // @ts-ignore
-      (sub) => sub.magazineId === id && sub.isActive
+      (sub) => sub.magazineId === magazine.id && sub.isActive
     );
     return isSubscribed ? (
-      <button className="subscribe-btn" onClick={() => handleUnSubscribe(id)}>
+      <button
+        className="subscribe-btn"
+        onClick={() => handleUnSubscribe(magazine)}
+      >
         UnSubscribe
       </button>
     ) : (
-      <button className="subscribe-btn" onClick={() => handleSubscribe(id)}>
+      <button
+        className="subscribe-btn"
+        onClick={() => handleSubscribe(magazine)}
+      >
         Subscribe
       </button>
     );
@@ -133,7 +134,7 @@ export const MagazineDetails = ({ magazine }) => {
         <div className="author">Category: {magazine.category}</div>
         <div className="author">Publication: {magazine.publication}</div>
         <div className="author">Price: {magazine.price}$</div>
-        {getSubScriptionBtn(magazine.id)}
+        {getSubScriptionBtn(magazine)}
       </div>
     </li>
   );

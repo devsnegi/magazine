@@ -22,6 +22,9 @@ export class MagSubscriptionService {
 
     magSubscription.userId = createMagSubscriptionDto.userId;
     magSubscription.magazineId = createMagSubscriptionDto.magazineId;
+    magSubscription.isActive = createMagSubscriptionDto.isActive;
+    magSubscription.price = createMagSubscriptionDto.price;
+    magSubscription.type = createMagSubscriptionDto.type;
     magSubscription.startDate = createMagSubscriptionDto.startDate;
     magSubscription.endDate = createMagSubscriptionDto.endDate;
 
