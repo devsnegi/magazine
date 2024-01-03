@@ -30,7 +30,7 @@ interface SubscribedMagazine {
 // @ts-ignore
 export const MagazineDetails = ({ magazine, isHistory }) => {
   // @ts-expect-error
-  const { dispatch } = useContext(MagazineContext);
+  const { state, dispatch } = useContext(MagazineContext);
   const [newSubscription, setNewSubscription] = useState(0);
   const [subscriptionList, setSubscriptionList] = useState([]);
 
@@ -116,7 +116,7 @@ export const MagazineDetails = ({ magazine, isHistory }) => {
     // @ts-ignore
     const isSubscribed = subscriptionList.find(
       // @ts-ignore
-      (sub) => sub.magazineId === magazine.id && sub.isActive
+      (sub) => sub.userId === state.userId && sub.isActive
     );
     return isSubscribed ? (
       <button

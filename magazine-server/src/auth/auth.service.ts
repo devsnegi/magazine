@@ -34,7 +34,7 @@ export class AuthService {
     return { token };
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string }> {
+  async login(loginDto: LoginDto): Promise<{ token: string; userId: number }> {
     const { username, password } = loginDto;
     console.log('email pass:-', username, password);
     const user = await this.usersRepository.findOne({
@@ -53,6 +53,6 @@ export class AuthService {
 
     const token = this.jwtService.sign({ id: user.id });
 
-    return { token };
+    return { token, userId: user.id };
   }
 }

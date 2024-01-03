@@ -9,6 +9,7 @@ export const initialState = {
   showSubscription: false,
   username: "",
   showLogIn: false,
+  userId: 0,
 };
 // @ts-expect-error
 export const magazineReducer = (state, action) => {
@@ -27,6 +28,7 @@ export const magazineReducer = (state, action) => {
       return {
         ...state,
         username: action?.payload?.username,
+        userId: action?.payload?.userId,
       };
     case SHOW_LOGIN_POPUP:
       return {

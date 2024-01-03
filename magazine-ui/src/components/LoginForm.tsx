@@ -41,7 +41,7 @@ export const LoginForm = () => {
             Cookies.set("token", token, { expires: 7, secure: true });
             dispatch({
               type: UPDATE_USER_NAME,
-              payload: { username: username },
+              payload: { username: username, userId: data.userId },
             });
             dispatch({
               type: SHOW_LOGIN_POPUP,

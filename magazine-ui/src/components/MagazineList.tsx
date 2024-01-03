@@ -12,7 +12,7 @@ const MagazineList = () => {
 
   useEffect(() => {
     if (state?.showSubScription) {
-      fetch(`${BASE_API_URL}subscription`)
+      fetch(`${BASE_API_URL}subscription/user/${state.userId}`)
         .then((res) => {
           return res.json();
         })
