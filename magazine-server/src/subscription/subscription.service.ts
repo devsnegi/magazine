@@ -14,14 +14,14 @@ export class SubscriptionService {
   createSubscription(
     createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
-    const subscription: Subscription = new Subscription();
+    // const subscription: Subscription = new Subscription();
 
-    subscription.userId = createSubscriptionDto.userId;
-    subscription.magazineId = createSubscriptionDto.magazineId;
-    subscription.isActive = createSubscriptionDto.isActive;
-    subscription.date = createSubscriptionDto.date;
+    // subscription.userId = createSubscriptionDto.userId;
+    // subscription.magazineId = createSubscriptionDto.magazineId;
+    // subscription.isActive = createSubscriptionDto.isActive;
+    // subscription.date = createSubscriptionDto.date;
 
-    return this.subscriptionRepository.save(subscription);
+    return this.subscriptionRepository.save(createSubscriptionDto);
   }
 
   findAllSubscription(): Promise<Subscription[]> {

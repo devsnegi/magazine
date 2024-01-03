@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { MagSubscriptionService } from './mag-subscription.service';
 import { CreateMagSubscriptionDto } from './dto/create-mag-subscription.dto';
+import { CreateSubscriptionDto } from '../subscription/dto/create-subscription.dto';
 import { UnsubscribeSubscriptionDto } from './dto/unSubscribe-subscription-user.dto';
 
 @Controller('mag-subscription')
@@ -10,9 +11,13 @@ export class MagSubscriptionController {
   ) {}
 
   @Post()
-  create(@Body() createMagSubscriptionDto: CreateMagSubscriptionDto) {
+  create(
+    @Body() createMagSubscriptionDto: CreateMagSubscriptionDto,
+    createSubscriptionDto: CreateSubscriptionDto,
+  ) {
     return this.magSubscriptionService.createMagSubscription(
       createMagSubscriptionDto,
+      // createSubscriptionDto,
     );
   }
 
@@ -26,14 +31,10 @@ export class MagSubscriptionController {
     @Param('id') id: string,
     @Body() unsubscribeSubscriptionDto: UnsubscribeSubscriptionDto,
   ) {
+    console.log('unsubscribeSubscriptionDto:---', unsubscribeSubscriptionDto);
     return await this.magSubscriptionService.updateSubcription(
       +id,
       unsubscribeSubscriptionDto,
     );
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.magSubscriptionService.viewMagSubscription(+id);
-  // }
 }

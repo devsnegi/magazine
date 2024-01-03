@@ -4,6 +4,7 @@ import { BASE_API_URL } from "../constant/appConstant";
 
 interface Magazine {
   id: number;
+  magazineId: number;
   name: string;
   category: string;
   publication: string;
@@ -11,13 +12,13 @@ interface Magazine {
 
 interface MagazineDetail {
   id: number;
+  magazineId: number;
   name: string;
   category: string;
   publication: string;
   price: number;
-  type: ["weekly", "monthly", "yearly"];
+  type: string;
   issue: number;
-  imagurl: string;
 }
 interface SubscribedMagazine {
   id: number;
@@ -27,18 +28,18 @@ interface SubscribedMagazine {
   magazineDetail: MagazineDetail;
 }
 // @ts-ignore
-export const MagazineDetails = ({ magazine }) => {
+export const MagazineDetails = ({ magazine, isHistory }) => {
   // @ts-expect-error
   const { dispatch } = useContext(MagazineContext);
   const [newSubscription, setNewSubscription] = useState(0);
   const [subscriptionList, setSubscriptionList] = useState([]);
 
-  const getMagazineID = (id: number) => {
+  const getMagazine = (id: number) => {
     // @ts-ignore
     const subscribedMagazine: SubscribedMagazine = subscriptionList.find(
       (sub: SubscribedMagazine) => sub.magazineId === id
     );
-    return subscribedMagazine?.id;
+    return subscribedMagazine;
   };
 
   useEffect(() => {
@@ -52,17 +53,21 @@ export const MagazineDetails = ({ magazine }) => {
       .then((data) => setSubscriptionList(data));
   }, []);
 
-  const checkAndUpdateSubscription = (magazineId: number, active: boolean) => {
+  const checkAndUpdateSubscription = (
+    magazine: MagazineDetail,
+    active: boolean
+  ) => {
     const requestOptions = {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        ...magazine,
         isActive: active,
       }),
     };
     // @ts-ignore
     fetch(
-      `${BASE_API_URL}mag-subscription/${magazineId}/unsubscribe`,
+      `${BASE_API_URL}mag-subscription/${magazine.id}/unsubscribe`,
       requestOptions
     )
       .then((response) => response.json())
@@ -70,9 +75,12 @@ export const MagazineDetails = ({ magazine }) => {
   };
 
   const handleSubscribe = async (magazine: MagazineDetail) => {
-    const magazineId = getMagazineID(magazine.id);
-    if (magazineId) {
-      checkAndUpdateSubscription(magazineId, true);
+    // @ts-ignore
+    const mag: MagazineDetail = getMagazine(magazine.id);
+
+    console.log("mag:-", mag, "magazine:-", magazine);
+    if (mag) {
+      checkAndUpdateSubscription(mag, true);
       return;
     }
     const defaultEndDate = new Date();
@@ -96,9 +104,12 @@ export const MagazineDetails = ({ magazine }) => {
       .then((response) => response.json())
       .then((data) => setNewSubscription(data.id));
   };
-  const handleUnSubscribe = (magazine: MagazineDetail) => {
-    const magazineId = getMagazineID(magazine.id);
-    checkAndUpdateSubscription(magazineId, false);
+  const handleUnSubscribe = (mag: MagazineDetail) => {
+    console.log("mag:-", mag);
+    const magazine = getMagazine(mag.id);
+    console.log("magazine:-", magazine);
+    // @ts-ignore
+    checkAndUpdateSubscription(magazine, false);
   };
 
   const getSubScriptionBtn = (magazine: MagazineDetail) => {
@@ -125,17 +136,20 @@ export const MagazineDetails = ({ magazine }) => {
   };
 
   return (
-    <li className="magazine-card">
-      <div className="mag-image">
-        <img src="./images1.jpeg" alt={magazine.name} />
-      </div>
-      <div className="magazine-details">
-        <div className="title">{magazine.name}</div>
-        <div className="author">Category: {magazine.category}</div>
-        <div className="author">Publication: {magazine.publication}</div>
-        <div className="author">Price: {magazine.price}$</div>
-        {getSubScriptionBtn(magazine)}
-      </div>
-    </li>
+    <>
+      {isHistory ? <div>Your subscription history</div> : null}
+      <li className="magazine-card">
+        <div className="mag-image">
+          <img src="./images1.jpeg" alt={magazine.name} />
+        </div>
+        <div className="magazine-details">
+          <div className="title">{magazine.name}</div>
+          <div className="author">Category: {magazine.category}</div>
+          <div className="author">Publication: {magazine.publication}</div>
+          <div className="author">Price: {magazine.price}$</div>
+          {getSubScriptionBtn(magazine)}
+        </div>
+      </li>
+    </>
   );
 };

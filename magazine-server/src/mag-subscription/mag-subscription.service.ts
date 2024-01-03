@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MagSubscription } from './entities/mag-subscription-entity';
@@ -6,29 +6,49 @@ import { CreateMagSubscriptionDto } from './dto/create-mag-subscription.dto';
 import { MagazineService } from 'src/magazine/magazine.service';
 import { UnsubscribeSubscriptionDto } from './dto/unSubscribe-subscription-user.dto';
 
+import { CreateSubscriptionDto } from '../subscription/dto/create-subscription.dto';
+// import { Subscription } from '../subscription/entities/subscription.entity';
+import { SubscriptionService } from '../subscription/subscription.service';
+// @Module({
+//   imports: [Subscription],
+// })
 @Injectable()
 export class MagSubscriptionService {
   constructor(
     @InjectRepository(MagSubscription)
     private readonly magsubscriptionRepository: Repository<MagSubscription>,
+    // private readonly subscriptionRepository: Repository<Subscription>,
+    private readonly subscriptionService: SubscriptionService,
     private readonly magazineService: MagazineService,
     // private readonly userService: UserService,
   ) {}
 
-  createMagSubscription(
+  async createMagSubscription(
     createMagSubscriptionDto: CreateMagSubscriptionDto,
   ): Promise<MagSubscription> {
-    const magSubscription: MagSubscription = new MagSubscription();
+    const createSubscriptionDto: CreateSubscriptionDto = {
+      userId: createMagSubscriptionDto.userId,
+      magazineId: createMagSubscriptionDto.magazineId,
+      isActive: createMagSubscriptionDto.isActive,
+      price: createMagSubscriptionDto.price,
+      type: createMagSubscriptionDto.type,
+      date: createMagSubscriptionDto.startDate,
+    };
+    console.log(`createSubscriptionDto: `, createSubscriptionDto);
 
-    magSubscription.userId = createMagSubscriptionDto.userId;
-    magSubscription.magazineId = createMagSubscriptionDto.magazineId;
-    magSubscription.isActive = createMagSubscriptionDto.isActive;
-    magSubscription.price = createMagSubscriptionDto.price;
-    magSubscription.type = createMagSubscriptionDto.type;
-    magSubscription.startDate = createMagSubscriptionDto.startDate;
-    magSubscription.endDate = createMagSubscriptionDto.endDate;
-
-    return this.magsubscriptionRepository.save(magSubscription);
+    const newSubscription = await this.magsubscriptionRepository.save(
+      createMagSubscriptionDto,
+    );
+    try {
+      const subscriptionActivity =
+        await this.subscriptionService.createSubscription(
+          createSubscriptionDto,
+        );
+      console.log(`subscriptionActivity::::: `, subscriptionActivity);
+    } catch (err) {
+      console.error(err);
+    }
+    return newSubscription;
   }
 
   findAllMagSubscription(): Promise<MagSubscription[]> {
@@ -61,17 +81,22 @@ export class MagSubscriptionService {
   async updateSubcription(
     id: number,
     unsubscribeSubscriptionDto: UnsubscribeSubscriptionDto,
+    // createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<any> {
-    // console.log(`updateSubscription called`, id);
-    const currentSubscriptionDetail =
-      await this.magsubscriptionRepository.findBy({
-        id: id,
-      });
-    // console.log(`currentSubscriptionDetail:: `, currentSubscriptionDetail);
-
-    return this.magsubscriptionRepository.update(
+    const createSubscriptionDto: CreateSubscriptionDto = {
+      userId: unsubscribeSubscriptionDto.userId,
+      magazineId: unsubscribeSubscriptionDto.magazineId,
+      isActive: unsubscribeSubscriptionDto.isActive,
+      price: unsubscribeSubscriptionDto.price,
+      type: unsubscribeSubscriptionDto.type,
+      date: unsubscribeSubscriptionDto.startDate,
+    };
+    const updatedSubscription = await this.magsubscriptionRepository.update(
       id,
-      unsubscribeSubscriptionDto,
+      { isActive: unsubscribeSubscriptionDto.isActive },
     );
+    const subscriptionActivity =
+      await this.subscriptionService.createSubscription(createSubscriptionDto);
+    return updatedSubscription;
   }
 }

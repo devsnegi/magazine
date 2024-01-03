@@ -8,6 +8,7 @@ import { MagSubscriptionService } from 'src/mag-subscription/mag-subscription.se
 import { MagazineService } from 'src/magazine/magazine.service';
 import { Magazine } from 'src/magazine/entities/magazine.entity';
 import { Subscription } from 'src/subscription/entities/subscription.entity';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Subscription } from 'src/subscription/entities/subscription.entity';
     MagSubscriptionService,
     MagazineService,
     Subscription,
+    SubscriptionService,
   ],
   exports: [UserService],
 })

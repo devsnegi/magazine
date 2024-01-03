@@ -8,6 +8,7 @@ import { Magazine } from 'src/magazine/entities/magazine.entity';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import { Subscription } from 'src/subscription/entities/subscription.entity';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Module({
   imports: [
@@ -17,7 +18,12 @@ import { Subscription } from 'src/subscription/entities/subscription.entity';
     TypeOrmModule.forFeature([Subscription]),
   ],
   controllers: [MagSubscriptionController],
-  providers: [MagSubscriptionService, MagazineService, UserService],
+  providers: [
+    MagSubscriptionService,
+    MagazineService,
+    UserService,
+    SubscriptionService,
+  ],
   exports: [MagSubscriptionService],
 })
 export class MagSubscriptionModule {}

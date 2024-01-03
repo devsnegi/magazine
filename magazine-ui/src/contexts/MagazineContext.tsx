@@ -1,13 +1,13 @@
 import React, { createContext, useReducer, useEffect } from "react";
-import { magazineReducer } from "../reducers/magazineReducer";
+import { magazineReducer, initialState } from "../reducers/magazineReducer";
 // @ts-expect-error
 export const MagazineContext = createContext();
 
 // @ts-expect-error
 const MagazineContextProvider = (props) => {
-  const [magazines, dispatch] = useReducer(magazineReducer, []);
+  const [state, dispatch] = useReducer(magazineReducer, initialState);
   return (
-    <MagazineContext.Provider value={{ magazines, dispatch }}>
+    <MagazineContext.Provider value={{ state, dispatch }}>
       {props.children}
     </MagazineContext.Provider>
   );
