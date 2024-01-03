@@ -14,13 +14,6 @@ export class SubscriptionService {
   createSubscription(
     createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
-    // const subscription: Subscription = new Subscription();
-
-    // subscription.userId = createSubscriptionDto.userId;
-    // subscription.magazineId = createSubscriptionDto.magazineId;
-    // subscription.isActive = createSubscriptionDto.isActive;
-    // subscription.date = createSubscriptionDto.date;
-
     return this.subscriptionRepository.save(createSubscriptionDto);
   }
 
@@ -30,5 +23,9 @@ export class SubscriptionService {
 
   viewSubscription(id: number): Promise<Subscription> {
     return this.subscriptionRepository.findOneBy({ id });
+  }
+
+  findSubscriptionByUserId(id: number): Promise<any> {
+    return this.subscriptionRepository.findBy({ userId: id });
   }
 }

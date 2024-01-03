@@ -8,8 +8,8 @@ import { MagazineHistory } from "./MagazineHistory";
 const MagazineList = () => {
   // @ts-ignore
   const { state } = useContext(MagazineContext);
-  // console.log("showSubScription:-", state);
   const [magazines, setMagazines] = useState([]);
+
   useEffect(() => {
     if (state?.showSubScription) {
       fetch(`${BASE_API_URL}subscription`)
@@ -26,7 +26,6 @@ const MagazineList = () => {
           return res.json();
         })
         .then((data) => {
-          console.log(data);
           setMagazines(data);
         });
     }

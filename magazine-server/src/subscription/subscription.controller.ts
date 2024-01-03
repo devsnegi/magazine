@@ -16,6 +16,11 @@ export class SubscriptionController {
     return this.subscriptionService.findAllSubscription();
   }
 
+  @Get('/user/:id')
+  async findSubscriptionByUserId(@Param('id') id: string) {
+    return await this.subscriptionService.findSubscriptionByUserId(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.subscriptionService.viewSubscription(+id);

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { MagazineContext } from "../contexts/MagazineContext";
 export const Header = () => {
   // @ts-ignore
-  const { dispatch } = useContext(MagazineContext);
+  const { state, dispatch } = useContext(MagazineContext);
   //@ts-ignore
   const showMySubscription = (e) => {
     e.preventDefault();
@@ -13,15 +13,23 @@ export const Header = () => {
     e.preventDefault();
     dispatch({ type: "SHOW_MAGAZINE_LIST" });
   };
-
+  const handleLogin = () => {
+    dispatch({ type: "SHOW_LOGIN_POPUP", payload: { showLogIn: true } });
+  };
   return (
     <div className="navbar">
       <h1 className="app-title" onClick={showMagazineList}>
         Magazine App
       </h1>
-      <div className="my-subscription" onClick={showMySubscription}>
-        My Subscription
-      </div>
+      {state.username ? (
+        <div className="my-subscription" onClick={showMySubscription}>
+          My Subscription
+        </div>
+      ) : (
+        <div>
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      )}
     </div>
   );
 };
