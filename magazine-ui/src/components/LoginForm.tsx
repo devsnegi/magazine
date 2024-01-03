@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
+// @ts-ignore
+import Cookies from "js-cookie";
 import "react-toastify/dist/ReactToastify.css";
 
 import { MagazineContext } from "../contexts/MagazineContext";
@@ -16,13 +18,36 @@ export const LoginForm = () => {
     if (validate()) {
       console.log("test");
       const requestOptions = {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
       };
       // let userId = 0;
-      fetch(`${BASE_API_URL}user`, requestOptions);
-      //   .then((response) => response.json())
-      //   .then((data) => setSubscriptionList(data));
+      fetch(`${BASE_API_URL}auth/login`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data:-", data);
+          if (data.error) {
+            toast.error(data.message);
+          } else {
+            const token = data.token;
+            Cookies.set("token", token, { expires: 7, secure: true });
+            dispatch({
+              type: "UPDATE_USER_NAME",
+              payload: { username: username },
+            });
+            dispatch({
+              type: "SHOW_LOGIN_POPUP",
+              payload: { showLogIn: false },
+            });
+          }
+        })
+        .catch((err) => {
+          toast.error("Login Failed due to : " + err.message);
+        });
 
       // dispatch({ type: "UPDATE_USER_NAME", payload: { username, userId } });
     }
@@ -44,7 +69,7 @@ export const LoginForm = () => {
       });
     }
 
-    return false;
+    return result;
   };
 
   return (
