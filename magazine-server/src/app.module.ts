@@ -10,7 +10,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { Subscription } from './subscription/entities/subscription.entity';
 import { MagSubscriptionModule } from './mag-subscription/mag-subscription.module';
 import { MagSubscription } from './mag-subscription/entities/mag-subscription-entity';
-
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -24,6 +24,7 @@ import { MagSubscription } from './mag-subscription/entities/mag-subscription-en
       synchronize: true,
       logging: true,
     }),
+    AuthModule,
     UserModule,
     MagazineModule,
     SubscriptionModule,

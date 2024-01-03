@@ -15,13 +15,17 @@ export const LoginForm = () => {
     e.preventDefault();
     if (validate()) {
       console.log("test");
-    }
-    // let userId = 0;
-    // fetch(`${BASE_API_URL}user`, requestOptions)
-    //   .then((response) => response.json())
-    //   .then((data) => setSubscriptionList(data));
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      // let userId = 0;
+      fetch(`${BASE_API_URL}user`, requestOptions);
+      //   .then((response) => response.json())
+      //   .then((data) => setSubscriptionList(data));
 
-    // dispatch({ type: "UPDATE_USER_NAME", payload: { username, userId } });
+      // dispatch({ type: "UPDATE_USER_NAME", payload: { username, userId } });
+    }
   };
 
   const validate = () => {
