@@ -1,1 +1,5 @@
 export const BASE_API_URL = "http://localhost:4000/";
+export const UPDATE_USER_NAME = "UPDATE_USER_NAME";
+export const SHOW_LOGIN_POPUP = "SHOW_LOGIN_POPUP";
+export const SHOW_MAGAZINE_LIST = "SHOW_MAGAZINE_LIST";
+export const SHOW_MY_SUBSCRIPTION = "SHOW_MY_SUBSCRIPTION";

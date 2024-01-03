@@ -5,7 +5,11 @@ import Cookies from "js-cookie";
 import "react-toastify/dist/ReactToastify.css";
 
 import { MagazineContext } from "../contexts/MagazineContext";
-import { BASE_API_URL } from "../constant/appConstant";
+import {
+  BASE_API_URL,
+  UPDATE_USER_NAME,
+  SHOW_LOGIN_POPUP,
+} from "../constant/appConstant";
 
 export const LoginForm = () => {
   // @ts-ignore
@@ -36,11 +40,11 @@ export const LoginForm = () => {
             const token = data.token;
             Cookies.set("token", token, { expires: 7, secure: true });
             dispatch({
-              type: "UPDATE_USER_NAME",
+              type: UPDATE_USER_NAME,
               payload: { username: username },
             });
             dispatch({
-              type: "SHOW_LOGIN_POPUP",
+              type: SHOW_LOGIN_POPUP,
               payload: { showLogIn: false },
             });
           }
@@ -48,8 +52,6 @@ export const LoginForm = () => {
         .catch((err) => {
           toast.error("Login Failed due to : " + err.message);
         });
-
-      // dispatch({ type: "UPDATE_USER_NAME", payload: { username, userId } });
     }
   };
 

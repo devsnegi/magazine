@@ -1,17 +1,23 @@
 import React, { useContext } from "react";
+
 import { MagazineContext } from "../contexts/MagazineContext";
+import {
+  SHOW_MY_SUBSCRIPTION,
+  SHOW_MAGAZINE_LIST,
+} from "../constant/appConstant";
+
 export const Header = () => {
   // @ts-ignore
   const { state, dispatch } = useContext(MagazineContext);
   //@ts-ignore
   const showMySubscription = (e) => {
     e.preventDefault();
-    dispatch({ type: "SHOW_MY_SUBSCRIPTION" });
+    dispatch({ type: SHOW_MY_SUBSCRIPTION });
   };
   // @ts-ignore
   const showMagazineList = (e) => {
     e.preventDefault();
-    dispatch({ type: "SHOW_MAGAZINE_LIST" });
+    dispatch({ type: SHOW_MAGAZINE_LIST });
   };
   const handleLogin = () => {
     dispatch({ type: "SHOW_LOGIN_POPUP", payload: { showLogIn: true } });
