@@ -14,7 +14,6 @@ export const ListItem = ({
   subscriptionList,
   setIsSubscriptionUpdate,
 }: ListPropType) => {
-  console.log("magazine, subscriptionList:-", magazine, subscriptionList);
   // @ts-ignore
   const { state } = useContext(MagazineContext);
   const getSubScriptionBtn = (magazine: Magazine) => {
@@ -23,7 +22,10 @@ export const ListItem = ({
     );
 
     return isSubscribed ? (
-      <button className="subscribe-btn" onClick={() => handleUnSubscribe()}>
+      <button
+        className="subscribe-btn"
+        onClick={() => handleUnSubscribe(magazine)}
+      >
         UnSubscribe
       </button>
     ) : (
@@ -40,7 +42,13 @@ export const ListItem = ({
     // @ts-ignore
     const mag: MagazineDetail = getMagazine(magazine.id, subscriptionList);
     if (mag) {
-      await checkAndUpdateSubscription(mag, true);
+      const response = await checkAndUpdateSubscription(mag, true);
+      if (response.affected) {
+        toast.success("Your subscription updated successful!");
+      } else {
+        toast.success("Something went wrong");
+      }
+
       setIsSubscriptionUpdate((prev) => !prev);
       return;
     }
@@ -48,14 +56,21 @@ export const ListItem = ({
     createMagazineSubscription(state.userId, magazine)
       // @ts-ignore
       .then((data) => {
-        console.log("createMagazineSubscription:-", data);
         toast.success("Your subscription is successful!");
       });
-    // @ts-ignore
     setIsSubscriptionUpdate((prev) => !prev);
   };
 
-  const handleUnSubscribe = () => true;
+  const handleUnSubscribe = async (magazine: Magazine) => {
+    const mag = getMagazine(magazine.id, subscriptionList);
+    const response = await checkAndUpdateSubscription(mag, false);
+    if (response.affected) {
+      toast.success("Your subscription updated successful!");
+    } else {
+      toast.success("Something went wrong");
+    }
+    setIsSubscriptionUpdate((prev) => !prev);
+  };
 
   return (
     <li className="magazine-card">

@@ -68,6 +68,4 @@ export const checkAndUpdateSubscription = async (
   );
   const data = await response?.json();
   return data;
-  // .then((response) => response.json())
-  // .then((data) => setNewSubscription(data.id));
 };
