@@ -3,18 +3,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Subscription } from './entities/subscription.entity';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { MagazineService } from '../magazine/magazine.service';
 
 @Injectable()
 export class SubscriptionService {
   constructor(
     @InjectRepository(Subscription)
     private readonly subscriptionRepository: Repository<Subscription>,
+    private readonly magazineService: MagazineService,
   ) {}
 
-  createSubscription(
+  async createSubscription(
     createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
-    return this.subscriptionRepository.save(createSubscriptionDto);
+    const id = createSubscriptionDto.magazineId;
+    const { name, category, publication, issue } =
+      await this.magazineService.viewMagazine(id);
+
+    return this.subscriptionRepository.save({
+      ...createSubscriptionDto,
+      name,
+      category,
+      publication,
+      issue,
+    });
   }
 
   findAllSubscription(): Promise<Subscription[]> {

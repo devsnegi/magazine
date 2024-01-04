@@ -1,4 +1,3 @@
-import { IsEnum, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -8,6 +7,18 @@ export class Subscription {
 
   @Column({ unique: false })
   userId: number;
+
+  @Column({ unique: false })
+  name: string;
+
+  @Column({ unique: false })
+  category: string;
+
+  @Column({ unique: false })
+  publication: string;
+
+  @Column({ unique: false })
+  issue: number;
 
   @Column({ unique: false })
   magazineId: number;

@@ -15,6 +15,13 @@ export const MagazineHistory = ({ magazine }) => {
           <div className="author">Category: {magazine.category}</div>
           <div className="author">Publication: {magazine.publication}</div>
           <div className="author">Price: {magazine.price}$</div>
+          <div className="author">Subscription Type: {magazine.type}</div>
+          <div className="author">
+            Last Updated: {new Date(magazine.date).toLocaleString()}
+          </div>
+          <div className="author">
+            Status: {magazine.isActive ? "Active" : "Deactivate"}
+          </div>
         </div>
       </li>
     </>
