@@ -9,16 +9,21 @@ import {
 export const Header = () => {
   // @ts-ignore
   const { state, dispatch } = useContext(MagazineContext);
-  //@ts-ignore
-  const showMySubscription = (e) => {
+
+  const showMySubscription = (
+    e: React.MouseEvent<HTMLHeadingElement, MouseEvent>
+  ) => {
     e.preventDefault();
     dispatch({ type: SHOW_MY_SUBSCRIPTION });
   };
-  // @ts-ignore
-  const showMagazineList = (e) => {
+
+  const showMagazineList = (
+    e: React.MouseEvent<HTMLHeadingElement, MouseEvent>
+  ) => {
     e.preventDefault();
     dispatch({ type: SHOW_MAGAZINE_LIST });
   };
+
   const handleLogin = () => {
     dispatch({ type: "SHOW_LOGIN_POPUP", payload: { showLogIn: true } });
   };

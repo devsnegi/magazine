@@ -14,7 +14,6 @@ export const List = () => {
   const showSubScription = state.showSubScription;
 
   const getMagazineData = () => {
-    // console.log(state.showSubScription, updateList);
     if (state?.showSubScription) {
       fetch(`${BASE_API_URL}subscription/user/${state.userId}`)
         .then((res) => {
