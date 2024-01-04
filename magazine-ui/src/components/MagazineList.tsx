@@ -9,7 +9,27 @@ const MagazineList = () => {
   // @ts-ignore
   const { state } = useContext(MagazineContext);
   const [magazines, setMagazines] = useState([]);
+  const [subscriptionList, setSubscriptionList] = useState([]);
 
+  const getExistingSubList = () => {
+    // useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    async function fetchSubscriptionList() {
+      let response = await fetch(
+        `${BASE_API_URL}user/${state.userId}/subcriptions`,
+        requestOptions
+      );
+      const data = await response.json();
+      console.log("subScription list:-", data);
+      setSubscriptionList(data);
+    }
+
+    fetchSubscriptionList();
+    // }, []);
+  };
   useEffect(() => {
     if (state?.showSubScription) {
       fetch(`${BASE_API_URL}subscription/user/${state.userId}`)
@@ -21,6 +41,7 @@ const MagazineList = () => {
           setMagazines(data);
         });
     } else {
+      getExistingSubList();
       fetch(`${BASE_API_URL}magazine`)
         .then((res) => {
           return res.json();
@@ -47,7 +68,12 @@ const MagazineList = () => {
         <ul>
           {magazines?.map((magazine) => (
             // @ts-expect-error
-            <MagazineDetails key={magazine?.id} magazine={magazine} />
+            <MagazineDetails
+              // @ts-ignore
+              key={magazine?.id}
+              magazine={magazine}
+              subscriptionList={subscriptionList}
+            />
           ))}
         </ul>
       )}

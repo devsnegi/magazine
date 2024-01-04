@@ -28,11 +28,11 @@ interface SubscribedMagazine {
   magazineDetail: MagazineDetail;
 }
 // @ts-ignore
-export const MagazineDetails = ({ magazine, isHistory }) => {
+export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
   // @ts-expect-error
   const { state, dispatch } = useContext(MagazineContext);
   const [newSubscription, setNewSubscription] = useState(0);
-  const [subscriptionList, setSubscriptionList] = useState([]);
+  // const [subscriptionList, setSubscriptionList] = useState([]);
 
   const getMagazine = (id: number) => {
     // @ts-ignore
@@ -41,17 +41,6 @@ export const MagazineDetails = ({ magazine, isHistory }) => {
     );
     return subscribedMagazine;
   };
-
-  useEffect(() => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch(`${BASE_API_URL}user/4/subcriptions`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => setSubscriptionList(data));
-  }, []);
 
   const checkAndUpdateSubscription = (
     magazine: MagazineDetail,
@@ -90,7 +79,7 @@ export const MagazineDetails = ({ magazine, isHistory }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: 4,
+        userId: state.userId,
         magazineId: magazine.id,
         isActive: true,
         price: magazine.price,
@@ -116,8 +105,11 @@ export const MagazineDetails = ({ magazine, isHistory }) => {
     // @ts-ignore
     const isSubscribed = subscriptionList.find(
       // @ts-ignore
-      (sub) => sub.userId === state.userId && sub.isActive
+      (sub) => sub.magazineId === magazine.id && sub.isActive
     );
+    console.log("subscriptionList:-", subscriptionList);
+    console.log("magazine:-", magazine);
+
     return isSubscribed ? (
       <button
         className="subscribe-btn"
