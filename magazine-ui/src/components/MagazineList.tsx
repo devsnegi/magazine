@@ -10,8 +10,10 @@ const MagazineList = () => {
   const { state } = useContext(MagazineContext);
   const [magazines, setMagazines] = useState([]);
   const [subscriptionList, setSubscriptionList] = useState([]);
+  const [updateList, setUpdateList] = useState(false);
 
-  const getExistingSubList = () => {
+  console.log("updateList:-", updateList);
+  const getExistingSubList = async () => {
     // useEffect(() => {
     const requestOptions = {
       method: "GET",
@@ -28,30 +30,31 @@ const MagazineList = () => {
     }
 
     fetchSubscriptionList();
-    // }, []);
   };
+
   useEffect(() => {
+    console.log(state.showSubScription, updateList);
     if (state?.showSubScription) {
       fetch(`${BASE_API_URL}subscription/user/${state.userId}`)
         .then((res) => {
           return res.json();
         })
         .then((data) => {
-          console.log(data);
           setMagazines(data);
         });
     } else {
-      getExistingSubList();
       fetch(`${BASE_API_URL}magazine`)
         .then((res) => {
           return res.json();
         })
         .then((data) => {
           setMagazines(data);
+          getExistingSubList();
         });
     }
-  }, [state.showSubScription]);
+  }, [state.showSubScription, updateList]);
 
+  console.log("magazines:-", magazines);
   return magazines?.length ? (
     <div className="book-list">
       {state?.showSubScription ? (
@@ -73,6 +76,7 @@ const MagazineList = () => {
               key={magazine?.id}
               magazine={magazine}
               subscriptionList={subscriptionList}
+              setUpdateList={setUpdateList}
             />
           ))}
         </ul>

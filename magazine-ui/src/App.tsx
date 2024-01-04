@@ -9,6 +9,7 @@ import MagazineContextProvider, {
 } from "./contexts/MagazineContext";
 import { Header } from "./components/Header";
 import { AppContainer } from "./components/AppContainer";
+import "react-toastify/dist/ReactToastify.css";
 // import MagazineList from "./components/MagazineList";
 // import { LoginForm } from "./components/LoginForm";
 
@@ -19,7 +20,6 @@ const App = () => {
     <div className="App">
       <MagazineContextProvider>
         <Header />
-        {/* {state.showLogIn ? <LoginForm /> : <MagazineList />} */}
         <AppContainer />
         <ToastContainer />
       </MagazineContextProvider>

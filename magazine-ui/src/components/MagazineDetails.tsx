@@ -27,8 +27,17 @@ interface SubscribedMagazine {
   isActive: boolean;
   magazineDetail: MagazineDetail;
 }
-// @ts-ignore
-export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
+
+export const MagazineDetails = ({
+  // @ts-ignore
+  magazine,
+  // @ts-ignore
+  isHistory,
+  // @ts-ignore
+  subscriptionList,
+  // @ts-ignore
+  setUpdateList,
+}) => {
   // @ts-expect-error
   const { state, dispatch } = useContext(MagazineContext);
   const [newSubscription, setNewSubscription] = useState(0);
@@ -42,7 +51,7 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
     return subscribedMagazine;
   };
 
-  const checkAndUpdateSubscription = (
+  const checkAndUpdateSubscription = async (
     magazine: MagazineDetail,
     active: boolean
   ) => {
@@ -55,7 +64,7 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
       }),
     };
     // @ts-ignore
-    fetch(
+    await fetch(
       `${BASE_API_URL}mag-subscription/${magazine.id}/unsubscribe`,
       requestOptions
     )
@@ -66,8 +75,6 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
   const handleSubscribe = async (magazine: MagazineDetail) => {
     // @ts-ignore
     const mag: MagazineDetail = getMagazine(magazine.id);
-
-    console.log("mag:-", mag, "magazine:-", magazine);
     if (mag) {
       checkAndUpdateSubscription(mag, true);
       return;
@@ -89,9 +96,11 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
       }),
     };
 
-    fetch(`${BASE_API_URL}mag-subscription`, requestOptions)
+    await fetch(`${BASE_API_URL}mag-subscription`, requestOptions)
       .then((response) => response.json())
       .then((data) => setNewSubscription(data.id));
+    // @ts-ignore
+    setUpdateList((prev) => !prev);
   };
   const handleUnSubscribe = (mag: MagazineDetail) => {
     console.log("mag:-", mag);
@@ -99,6 +108,8 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
     console.log("magazine:-", magazine);
     // @ts-ignore
     checkAndUpdateSubscription(magazine, false);
+    // @ts-ignore
+    setUpdateList((prev) => !prev);
   };
 
   const getSubScriptionBtn = (magazine: MagazineDetail) => {
@@ -107,8 +118,6 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
       // @ts-ignore
       (sub) => sub.magazineId === magazine.id && sub.isActive
     );
-    console.log("subscriptionList:-", subscriptionList);
-    console.log("magazine:-", magazine);
 
     return isSubscribed ? (
       <button
@@ -139,7 +148,7 @@ export const MagazineDetails = ({ magazine, isHistory, subscriptionList }) => {
           <div className="author">Category: {magazine.category}</div>
           <div className="author">Publication: {magazine.publication}</div>
           <div className="author">Price: {magazine.price}$</div>
-          {getSubScriptionBtn(magazine)}
+          {state.userId ? getSubScriptionBtn(magazine) : null}
         </div>
       </li>
     </>

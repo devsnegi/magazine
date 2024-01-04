@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 // @ts-ignore
 import Cookies from "js-cookie";
-import "react-toastify/dist/ReactToastify.css";
 
 import { MagazineContext } from "../contexts/MagazineContext";
 import {
@@ -37,8 +36,9 @@ export const LoginForm = () => {
           if (data.error) {
             toast.error(data.message);
           } else {
-            const token = data.token;
+            const { token, userId } = data.token;
             Cookies.set("token", token, { expires: 7, secure: true });
+            Cookies.set("userId", userId, { expires: 7, secure: true });
             dispatch({
               type: UPDATE_USER_NAME,
               payload: { username: username, userId: data.userId },
